@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Cleaning — Clean27</title>
+    <meta name="description" content="Book a professional home cleaning online in seconds.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #0F172A;
+            --blue: #2563EB;
+            --blue-dk: #1d4ed8;
+            --blue-lt: #EFF6FF;
+            --silver: #CBD5E1;
+            --silver-lt: #F1F5F9;
+            --white: #FFFFFF;
+            --text: #111827;
+            --muted: #64748B;
+            --border: #E2E8F0;
+            --success: #16A34A;
+            --error: #DC2626;
+            --r: 8px;
+            --r-lg: 12px;
+            --shadow: 0 2px 12px rgba(15, 23, 42, .07);
+            --shadow-lg: 0 8px 32px rgba(15, 23, 42, .12);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--silver-lt);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--navy);
+        }
+
+        .logo span {
+            color: var(--blue);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .secure-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--blue-lt);
+            color: var(--blue);
+            font-size: .78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: var(--r);
+        }
+
+        .nav-back {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: .85rem;
+            font-weight: 600;
+            transition: color .2s;
+        }
+
+        .nav-back:hover {
+            color: var(--navy);
+        }
+
+        /* LAYOUT */
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 5% 80px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 32px;
+            align-items: start;
+        }
+
+        @media(max-width:860px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        /* PROGRESS */
+        .progress-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-top h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .step-count {
+            font-size: .82rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .steps {
+            display: flex;
+            align-items: center;
+        }
+
+        .step-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+        }
+
+        .step-item+.step-item::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            right: 50%;
+            left: -50%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .step-item.done+.step-item::before,
+        .step-item.active+.step-item::before {
+            background: var(--blue);
+        }
+
+        .step-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--muted);
+            position: relative;
+            z-index: 1;
+            transition: all .25s;
+        }
+
+        .step-item.done .step-circle {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: var(--white);
+        }
+
+        .step-item.active .step-circle {
+            background: var(--navy);
+            border-color: var(--navy);
+            color: var(--white);
+            box-shadow: 0 0 0 3px var(--blue-lt);
+        }
+
+        .step-lbl {
+            font-size: .7rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .step-item.active .step-lbl {
+            color: var(--navy);
+        }
+
+        .step-item.done .step-lbl {
+            color: var(--blue);
+        }
+
+        /* CARD */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .card-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-head h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .card-head p {
+            font-size: .82rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .card-body {
+            padding: 22px 24px;
+        }
+
+        /* SERVICE GRID */
+        .svc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media(max-width:480px) {
+            .svc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .svc-card {
+            border: 1.5px solid var(--border);
+            border-radius: var(--r);
+            padding: 18px 16px;
+            cursor: pointer;
+            transition: all .2s;
+            position: relative;
+        }
+
+        .svc-card:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, .12);
+        }
+
+        .svc-card.selected {
+            border-color: var(--blue);
+            background: var(--blue-lt);
+        }
+
+        .svc-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .svc-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r);
+            background: var(--blue-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            font-size: .95rem;
+        }
+
+        .svc-card.selected .svc-icon {
+            background: var(--blue);
+            color: var(--white);
+        }
+
+        .svc-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: var(--white);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: .62rem;
+        }
+
+        .svc-card.selected .svc-check {
+            display: flex;
+        }
+
+        .svc-name {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .svc-desc {
+            font-size: .78rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .svc-price {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        /* EXTRAS */
+        .extra-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .extra-row:last-child {
+            border-bottom: none;
+        }
+
+        .extra-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .extra-icon {
+            color: var(--blue);
+            width: 16px;
+            text-align: center;
+        }
+
+        .extra-name {
+            font-size: .88rem;
+            font-weight: 600;
+        }
+
+        .extra-price {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .qty-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--silver-lt);
+            cursor: pointer;
+            font-size: .9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+            color: var(--navy);
+        }
+
+        .qty-btn:hover {
+            background: var(--blue-lt);
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .qty-val {
+            font-weight: 700;
+            font-size: .9rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* CALENDAR */
+        .cal-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .cal-month {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .cal-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--r);
+            border: 1px solid var(--border);
+            background: var(--white);
+            cursor: pointer;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .85rem;
+            transition: all .15s;
+        }
+
+        .cal-btn:hover {
+            background: var(--blue-lt);
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .cal-lbl {
+            text-align: center;
+            font-size: .7rem;
+            font-weight: 700;
+            color: var(--muted);
+            padding: 4px 0;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--r);
+            font-size: .82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .cal-day:hover:not(.empty):not(.past) {
+            background: var(--blue-lt);
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        .cal-day.empty,
+        .cal-day.past {
+            color: #D1D5DB;
+            cursor: default;
+        }
+
+        .cal-day.today {
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        .cal-day.selected {
+            background: var(--navy);
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        /* TIME SLOTS */
+        .time-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .time-label {
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-chip {
+            background: var(--blue-lt);
+            color: var(--blue);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+        }
+
+        .slot {
+            padding: 10px 6px;
+            text-align: center;
+            border-radius: var(--r);
+            border: 1.5px solid var(--border);
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--navy);
+            transition: all .2s;
+        }
+
+        .slot:hover:not(.unavail) {
+            border-color: var(--blue);
+            color: var(--blue);
+            background: var(--blue-lt);
+        }
+
+        .slot.selected {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: var(--white);
+        }
+
+        .slot.unavail {
+            color: #D1D5DB;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .slot-loading {
+            font-size: .82rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot-pulse {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .dot-pulse span {
+            width: 5px;
+            height: 5px;
+            background: var(--blue);
+            border-radius: 50%;
+            animation: dp 1.2s ease-in-out infinite;
+        }
+
+        .dot-pulse span:nth-child(2) {
+            animation-delay: .2s
+        }
+
+        .dot-pulse span:nth-child(3) {
+            animation-delay: .4s
+        }
+
+        @keyframes dp {
+
+            0%,
+            80%,
+            100% {
+                opacity: .2
+            }
+
+            40% {
+                opacity: 1
+            }
+        }
+
+        /* FORM */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        @media(max-width:480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fg {
+            margin-bottom: 14px;
+        }
+
+        .fg label {
+            display: block;
+            font-size: .78rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--navy);
+        }
+
+        .fg input,
+        .fg select,
+        .fg textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--r);
+            font-family: inherit;
+            font-size: .88rem;
+            color: var(--text);
+            background: var(--white);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .fg input:focus,
+        .fg select:focus,
+        .fg textarea:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+        }
+
+        .fg textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin: 18px 0 4px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* REVIEW TABLE */
+        .review-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: .88rem;
+            gap: 12px;
+        }
+
+        .review-row:last-child {
+            border-bottom: none;
+        }
+
+        .review-row .lbl {
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .review-row .lbl i {
+            color: var(--blue);
+            width: 14px;
+        }
+
+        .review-row .val {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .review-row.total {
+            font-size: 1rem;
+            padding-top: 14px;
+        }
+
+        .review-row.total .val {
+            color: var(--blue);
+            font-size: 1.15rem;
+        }
+
+        /* BUTTONS */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+        }
+
+        .btn {
+            padding: 11px 24px;
+            border-radius: var(--r);
+            border: none;
+            font-family: inherit;
+            font-size: .88rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all .2s;
+        }
+
+        .btn-blue {
+            background: var(--blue);
+            color: var(--white);
+            box-shadow: 0 3px 12px rgba(37, 99, 235, .3);
+        }
+
+        .btn-blue:hover:not(:disabled) {
+            background: var(--blue-dk);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, .4);
+            transform: translateY(-1px);
+        }
+
+        .btn-blue:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--silver-lt);
+            color: var(--navy);
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 10px 14px;
+            border-radius: var(--r);
+            font-size: .82rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .alert-error {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: #B91C1C;
+        }
+
+        .alert-success {
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            color: #15803D;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: sticky;
+            top: 84px;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .sidebar-head {
+            background: var(--navy);
+            color: var(--white);
+            padding: 16px 20px;
+        }
+
+        .sidebar-head h3 {
+            font-size: .95rem;
+            font-weight: 700;
+        }
+
+        .sidebar-head p {
+            font-size: .75rem;
+            color: #64748B;
+            margin-top: 2px;
+        }
+
+        .sidebar-body {
+            padding: 18px 20px;
+        }
+
+        .sum-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: .85rem;
+            gap: 10px;
+        }
+
+        .sum-row:last-child {
+            border-bottom: none;
+        }
+
+        .sum-row .lbl {
+            color: var(--muted);
+        }
+
+        .sum-row .val {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .sum-row.total {
+            font-size: .95rem;
+        }
+
+        .sum-row.total .val {
+            color: var(--blue);
+            font-size: 1.05rem;
+        }
+
+        .empty-sum {
+            text-align: center;
+            padding: 28px 16px;
+            color: var(--muted);
+            font-size: .82rem;
+        }
+
+        .empty-sum i {
+            font-size: 1.8rem;
+            color: var(--border);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .trust-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 18px 20px;
+            margin-top: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .trust-card h4 {
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .trust-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .82rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .trust-line i {
+            color: var(--blue);
+            width: 14px;
+        }
+
+        /* SPINNER */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-top-color: var(--white);
+            animation: spin .6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* SUCCESS */
+        .success-wrap {
+            text-align: center;
+            padding: 52px 24px;
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--blue-lt);
+            color: var(--blue);
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 22px;
+        }
+
+        .success-wrap h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .success-wrap p {
+            color: var(--muted);
+            font-size: .9rem;
+            margin-bottom: 6px;
+        }
+
+        .booking-id {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: var(--r);
+            margin: 14px 0 22px;
+            letter-spacing: .04em;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* PANELS */
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+            animation: fadeIn .3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* SKELETON */
+        .sk {
+            height: 90px;
+            border-radius: var(--r);
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200%;
+            animation: sh 1.4s infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes sh {
+            0% {
+                background-position: 200%
+            }
+
+            100% {
+                background-position: -200%
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="logo">Clean<span>27</span></a>
+        <div class="nav-right">
+            <div class="secure-pill"><i class="fa-solid fa-lock"></i> Secure Booking</div>
+            <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="page">
+        <!-- MAIN -->
+        <div>
+            <!-- PROGRESS -->
+            <div class="progress-card">
+                <div class="progress-top">
+                    <h1><i class="fa-solid fa-calendar-check" style="color:var(--blue);margin-right:8px;"></i>Book Your
+                        Cleaning</h1>
+                    <span class="step-count" id="stepLabel">Step 1 of 4</span>
+                </div>
+                <div class="steps">
+                    <div class="step-item active" id="si1">
+                        <div class="step-circle" id="sc1">1</div><span class="step-lbl">Service</span>
+                    </div>
+                    <div class="step-item" id="si2">
+                        <div class="step-circle" id="sc2">2</div><span class="step-lbl">Schedule</span>
+                    </div>
+                    <div class="step-item" id="si3">
+                        <div class="step-circle" id="sc3">3</div><span class="step-lbl">Details</span>
+                    </div>
+                    <div class="step-item" id="si4">
+                        <div class="step-circle" id="sc4">4</div><span class="step-lbl">Confirm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div class="panel active" id="panel1">
+                <div class="card">
+                    <div class="card-head">
+                        <h2><i class="fa-solid fa-broom" style="color:var(--blue);margin-right:6px;"></i>Choose Your
+                            Service</h2>
+                        <p>Select the cleaning package that suits your home.</p>
+                    </div>
+                    <div class="card-body">
+                        <div id="svcAlert"></div>
+                        <div id="svcList">
+                            <div class="sk"></div>
+                            <div class="sk"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" id="extrasCard" style="display:none;">
+                    <div class="card-head">
+                        <h2><i class="fa-solid fa-plus" style="color:var(--blue);margin-right:6px;"></i>Optional Add-ons
+                        </h2>
+                        <p>Enhance your clean with these extras.</p>
+                    </div>
+                    <div class="card-body">
+                        <div id="extrasList"></div>
+                    </div>
+                </div>
+                <div class="nav-row">
+                    <div></div>
+                    <button class="btn btn-blue" id="toStep2" disabled onclick="goStep(2)"><i
+                            class="fa-solid fa-arrow-right"></i> Date &amp; Time</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="panel" id="panel2">
+                <div class="card">
+                    <div class="card-head">
+                        <h2><i class="fa-solid fa-calendar-days" style="color:var(--blue);margin-right:6px;"></i>Pick a
+                            Date &amp; Time</h2>
+                        <p>Choose your preferred date from the calendar, then select an available time slot.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="cal-nav">
+                            <button class="cal-btn" onclick="prevMonth()"><i
+                                    class="fa-solid fa-chevron-left"></i></button>
+                            <span class="cal-month" id="calMonth"></span>
+                            <button class="cal-btn" onclick="nextMonth()"><i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        <div class="cal-grid">
+                            <div class="cal-lbl">Su</div>
+                            <div class="cal-lbl">Mo</div>
+                            <div class="cal-lbl">Tu</div>
+                            <div class="cal-lbl">We</div>
+                            <div class="cal-lbl">Th</div>
+                            <div class="cal-lbl">Fr</div>
+                            <div class="cal-lbl">Sa</div>
+                        </div>
+                        <div class="cal-grid" id="calGrid"></div>
+                        <div class="time-section" id="timeSection" style="display:none;">
+                            <div class="time-label"><i class="fa-regular fa-clock" style="color:var(--blue);"></i>
+                                Available times for <span class="date-chip" id="selDateLabel"></span></div>
+                            <div class="slot-grid" id="timeSlots"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-row">
+                    <button class="btn btn-ghost" onclick="goStep(1)"><i class="fa-solid fa-arrow-left"></i>
+                        Back</button>
+                    <button class="btn btn-blue" id="toStep3" disabled onclick="goStep(3)"><i
+                            class="fa-solid fa-arrow-right"></i> Your Details</button>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="panel" id="panel3">
+                <div class="card">
+                    <div class="card-head">
+                        <h2><i class="fa-solid fa-user" style="color:var(--blue);margin-right:6px;"></i>Your Details
+                        </h2>
+                        <p>We need a few details to complete your booking.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="fg"><label>First Name *</label><input id="fName" placeholder="Jane"
+                                    oninput="checkForm()"></div>
+                            <div class="fg"><label>Last Name *</label><input id="lName" placeholder="Smith"
+                                    oninput="checkForm()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="fg"><label>Email Address *</label><input id="email" type="email"
+                                    placeholder="jane@example.com" oninput="checkForm()"></div>
+                            <div class="fg"><label>Phone Number *</label><input id="phone" type="tel"
+                                    placeholder="+1 (555) 000-0000" oninput="checkForm()"></div>
+                        </div>
+                        <div class="divider">Service Address</div>
+                        <div class="fg"><label>Street Address *</label><input id="addr" placeholder="123 Main Street"
+                                oninput="checkForm()"></div>
+                        <div class="form-row">
+                            <div class="fg"><label>City *</label><input id="city" placeholder="New York"
+                                    oninput="checkForm()"></div>
+                            <div class="fg"><label>State</label><input id="state" placeholder="NY" maxlength="3"
+                                    value="NY"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="fg"><label>ZIP Code *</label><input id="zip" placeholder="10001"
+                                    oninput="checkForm()"></div>
+                            <div class="fg"><label>Frequency</label>
+                                <select id="freq">
+                                    <option value="once">One-time</option>
+                                    <option value="weekly">Weekly (save 15%)</option>
+                                    <option value="biweekly">Every 2 Weeks (save 10%)</option>
+                                    <option value="monthly">Monthly (save 5%)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fg"><label>Special Instructions</label><textarea id="notes"
+                                placeholder="e.g. Gate code 1234, focus on kitchen…"></textarea></div>
+                    </div>
+                </div>
+                <div class="nav-row">
+                    <button class="btn btn-ghost" onclick="goStep(2)"><i class="fa-solid fa-arrow-left"></i>
+                        Back</button>
+                    <button class="btn btn-blue" id="toStep4" disabled onclick="goStep(4)"><i
+                            class="fa-solid fa-arrow-right"></i> Review Booking</button>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="panel" id="panel4">
+                <div class="card">
+                    <div class="card-head">
+                        <h2><i class="fa-solid fa-circle-check" style="color:var(--blue);margin-right:6px;"></i>Review
+                            &amp; Confirm</h2>
+                        <p>Please verify all details before confirming.</p>
+                    </div>
+                    <div class="card-body" id="reviewBody"></div>
+                </div>
+                <div id="confirmAlert"></div>
+                <div class="nav-row">
+                    <button class="btn btn-ghost" onclick="goStep(3)"><i class="fa-solid fa-arrow-left"></i> Edit
+                        Details</button>
+                    <button class="btn btn-blue" id="submitBtn" onclick="submitBooking()"><i
+                            class="fa-solid fa-check"></i> Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-head">
+                    <h3>Booking Summary</h3>
+                    <p>Your selections at a glance</p>
+                </div>
+                <div class="sidebar-body" id="summaryBody">
+                    <div class="empty-sum"><i class="fa-solid fa-clipboard-list"></i>
+                        <p>Select a service to see your summary here.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="trust-card">
+                <h4><i class="fa-solid fa-shield-halved" style="color:var(--blue);margin-right:6px;"></i>You're
+                    Protected</h4>
+                <div class="trust-line"><i class="fa-solid fa-shield-halved"></i> Fully insured &amp; bonded</div>
+                <div class="trust-line"><i class="fa-solid fa-user-check"></i> Background-checked pros</div>
+                <div class="trust-line"><i class="fa-solid fa-leaf"></i> Eco-friendly products</div>
+                <div class="trust-line"><i class="fa-solid fa-rotate"></i> 100% satisfaction guarantee</div>
+                <div class="trust-line"><i class="fa-solid fa-calendar-xmark"></i> Easy to reschedule</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const L = { info: (m, d) => console.log('[INFO]', m, d || ''), error: (m, d) => console.error('[ERR]', m, d || '') };
+
+        const S = {
+            step: 1, services: [], selection: null, pricingParams: [],
+            extraConfigs: [], extras: {},
+            date: null, time: null, arrivalWindow: null, spotsCache: {},
+            calY: new Date().getFullYear(), calM: new Date().getMonth(),
+        };
+
+        // ─── API ─────────────────────────────────────────────────────
+        async function api(path, method = 'GET', body = null) {
+            if (path === '/bookings' && method === 'POST') {
+                const fd = new FormData();
+                const m = { first_name: body.customer.first_name, last_name: body.customer.last_name, email: body.customer.email, phone: body.customer.phone, address: body.address, city: body.city, state: body.state, zip: body.zip, service_id: body.service_id, pricing_parameters: JSON.stringify(body.pricing_parameters || []), date: body.date, time: body.time, arrival_window: body.arrival_window ?? 0 };
+                Object.entries(m).forEach(([k, v]) => fd.append(k, v));
+                const r = await fetch('api.php?action=book', { method: 'POST', body: fd });
+                const j = await r.json(); if (!r.ok) throw new Error(j.message || j.error || `HTTP ${r.status}`); return j;
+            }
+            const r = await fetch(`proxy.php?path=${encodeURIComponent(path)}`, { method, headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+            const j = await r.json(); if (!r.ok) throw new Error(j.message || j.error || `HTTP ${r.status}`); return j;
+        }
+
+        // ─── STEPS ───────────────────────────────────────────────────
+        function goStep(n) {
+            if (n === S.step) return;
+            if (n > S.step) {
+                if (n >= 2 && !S.selection) return;
+                if (n >= 3 && (!S.date || !S.time)) return;
+                if (n >= 4 && !formOk()) return;
+            }
+            S.step = n;
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`panel${n}`).classList.add('active');
+            document.getElementById('stepLabel').textContent = `Step ${n} of 4`;
+            ['1', '2', '3', '4'].forEach(i => {
+                const item = document.getElementById(`si${i}`), circ = document.getElementById(`sc${i}`), num = +i;
+                item.className = 'step-item';
+                if (num < n) { item.classList.add('done'); circ.innerHTML = '<i class="fa-solid fa-check" style="font-size:.6rem"></i>'; }
+                else if (num === n) { item.classList.add('active'); circ.textContent = num; }
+                else circ.textContent = num;
+            });
+            if (n === 4) buildReview();
+            updateSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─── SERVICES ────────────────────────────────────────────────
+        function svcIcon(name) {
+            name = (name || '').toLowerCase();
+            if (name.includes('deep')) return 'fa-solid fa-sparkles';
+            if (name.includes('move') || name.includes('out')) return 'fa-solid fa-box-open';
+            if (name.includes('office')) return 'fa-solid fa-building';
+            return 'fa-solid fa-broom';
+        }
+
+        async function loadServices() {
+            try {
+                const d = await api('/services'); S.services = d.services || d || [];
+            } catch (e) { showAlert('svcAlert', e.message, 'error'); S.services = []; }
+            const el = document.getElementById('svcList');
+            if (!S.services.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;">No services found.</p>'; return; }
+            el.innerHTML = `<div class="svc-grid">${S.services.map(s => `
+    <div class="svc-card" id="sc-${s.id}" onclick="pickService(${s.id})">
+      <div class="svc-card-top">
+        <div class="svc-icon"><i class="${svcIcon(s.name)}"></i></div>
+        <div class="svc-check" id="chk-${s.id}"><i class="fa-solid fa-check" style="font-size:.55rem"></i></div>
+      </div>
+      <div class="svc-name">${s.name}</div>
+      <p class="svc-desc">${s.description || ''}</p>
+      <div class="svc-price">$${Number(s.price).toFixed(2)}<span style="font-size:.75rem;font-weight:500;color:var(--muted);"> /visit</span></div>
+      ${s.duration ? `<div style="font-size:.72rem;color:var(--muted);margin-top:3px;"><i class="fa-regular fa-clock" style="margin-right:3px;"></i>~${Math.floor(s.duration / 60)}h${s.duration % 60 ? s.duration % 60 + 'm' : ''}</div>` : ''}
+    </div>`).join('')}</div>`;
+            loadExtras();
+        }
+
+        async function loadExtras() {
+            try { const d = await api('/extras'); S.extraConfigs = d.extras || d || []; } catch { }
+            S.extraConfigs.forEach(e => { S.extras[e.id] = 0; });
+            if (!S.extraConfigs.length) { document.getElementById('extrasCard').style.display = 'none'; return; }
+            document.getElementById('extrasCard').style.display = 'block';
+            document.getElementById('extrasList').innerHTML = S.extraConfigs.map(e => `
+    <div class="extra-row">
+      <div class="extra-info">
+        <i class="fa-solid fa-plus extra-icon"></i>
+        <div><div class="extra-name">${e.name}</div><div class="extra-price">+$${Number(e.price).toFixed(2)}/item</div></div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="chgExtra(${e.id},-1)"><i class="fa-solid fa-minus"></i></button>
+        <span class="qty-val" id="qty-${e.id}">0</span>
+        <button class="qty-btn" onclick="chgExtra(${e.id},1)"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>`).join('');
+        }
+
+        function pickService(id) {
+            S.selection = S.services.find(s => s.id === id); S.pricingParams = S.selection?.pricing_parameters || [];
+            document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById(`sc-${id}`).classList.add('selected');
+            document.getElementById('toStep2').disabled = false; updateSidebar();
+        }
+        function chgExtra(id, d) { S.extras[id] = Math.max(0, (S.extras[id] || 0) + d); document.getElementById(`qty-${id}`).textContent = S.extras[id]; updateSidebar(); }
+
+        // ─── CALENDAR ────────────────────────────────────────────────
+        function renderCal() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const now = new Date(), y = S.calY, m = S.calM;
+            document.getElementById('calMonth').textContent = `${months[m]} ${y}`;
+            const first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate();
+            const grid = document.getElementById('calGrid'); grid.innerHTML = '';
+            for (let i = 0; i < first; i++) { const c = document.createElement('div'); c.className = 'cal-day empty'; grid.appendChild(c); }
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            for (let d = 1; d <= days; d++) {
+                const dt = new Date(y, m, d), ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const past = dt < today, isToday = dt.toDateString() === today.toDateString();
+                const c = document.createElement('div');
+                c.textContent = d; c.className = `cal-day${past ? ' past' : ''}${isToday ? ' today' : ''}${S.date === ds ? ' selected' : ''}`;
+                if (!past) c.onclick = () => pickDate(ds, dt);
+                grid.appendChild(c);
+            }
+        }
+        function pickDate(ds, dt) {
+            S.date = ds; S.time = null; S.arrivalWindow = null;
+            document.getElementById('toStep3').disabled = true; renderCal();
+            document.getElementById('selDateLabel').textContent = dt.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric' });
+            document.getElementById('timeSection').style.display = 'block';
+            loadSlots(); updateSidebar();
+        }
+        async function loadSlots() {
+            const el = document.getElementById('timeSlots');
+            el.innerHTML = `<div class="slot-loading"><div class="dot-pulse"><span></span><span></span><span></span></div>Loading times…</div>`;
+            try {
+                let spots;
+                if (S.spotsCache[S.date]) { spots = S.spotsCache[S.date]; }
+                else {
+                    const r = await fetch(`proxy.php?path=/spots&service_id=${S.selection.id}&date=${S.date}`, { headers: { Accept: 'application/json' } });
+                    const raw = await r.json(); const days = Array.isArray(raw) ? raw : [];
+                    const found = days.find(d => d.date === S.date); spots = found ? found.spots : [];
+                    S.spotsCache[S.date] = spots;
+                }
+                const free = spots.filter(s => s.free);
+                if (!free.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.82rem;grid-column:1/-1;">No available times on this date. Please pick another day.</p>'; return; }
+                el.innerHTML = free.map(s => {
+                    const h = s.hours, mn = s.minutes, p = h < 12 ? 'AM' : 'PM', h12 = h % 12 || 12;
+                    const lbl = `${h12}:${String(mn).padStart(2, '0')} ${p}`;
+                    return `<div class="slot${S.time === lbl ? ' selected' : ''}" onclick="pickTime('${lbl}',${s.arrival_window})">${lbl}</div>`;
+                }).join('');
+            } catch (e) { el.innerHTML = '<p style="color:var(--error);font-size:.82rem;grid-column:1/-1;">Could not load times. Try another date.</p>'; }
+        }
+        function pickTime(t, aw) { S.time = t; S.arrivalWindow = aw; document.getElementById('toStep3').disabled = false; loadSlots(); updateSidebar(); }
+        function prevMonth() { S.calM--; if (S.calM < 0) { S.calM = 11; S.calY--; } renderCal(); }
+        function nextMonth() { S.calM++; if (S.calM > 11) { S.calM = 0; S.calY++; } renderCal(); }
+
+        // ─── FORM ────────────────────────────────────────────────────
+        function formOk() { return ['fName', 'lName', 'email', 'phone', 'addr', 'city', 'zip'].every(f => document.getElementById(f)?.value.trim()); }
+        function checkForm() { document.getElementById('toStep4').disabled = !formOk(); updateSidebar(); }
+
+        // ─── REVIEW ──────────────────────────────────────────────────
+        function calcTotal() {
+            let extras = 0; S.extraConfigs.filter(e => S.extras[e.id] > 0).forEach(e => { extras += e.price * S.extras[e.id]; });
+            const freq = document.getElementById('freq')?.value || 'once';
+            const disc = { once: 0, weekly: .15, biweekly: .10, monthly: .05 }[freq] || 0;
+            return { svc: S.selection.price, extras, disc: (S.selection.price + extras) * disc, total: (S.selection.price + extras) * (1 - disc) };
+        }
+        function buildReview() {
+            const t = calcTotal(), freq = document.getElementById('freq')?.value || 'once';
+            const fn = { once: 'One-time', weekly: 'Weekly', biweekly: 'Every 2 Weeks', monthly: 'Monthly' };
+            const extraLines = S.extraConfigs.filter(e => S.extras[e.id] > 0).map(e => `
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-plus"></i>${e.name} ×${S.extras[e.id]}</span><span class="val">$${(e.price * S.extras[e.id]).toFixed(2)}</span></div>`).join('');
+            document.getElementById('reviewBody').innerHTML = `
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-user"></i>Name</span><span class="val">${document.getElementById('fName').value} ${document.getElementById('lName').value}</span></div>
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-envelope"></i>Email</span><span class="val">${document.getElementById('email').value}</span></div>
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-broom"></i>Service</span><span class="val">${S.selection.name}</span></div>
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-calendar"></i>Date &amp; Time</span><span class="val">${S.date} at ${S.time}</span></div>
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-location-dot"></i>Address</span><span class="val">${document.getElementById('addr').value}, ${document.getElementById('city').value}</span></div>
+    <div class="review-row"><span class="lbl"><i class="fa-solid fa-rotate"></i>Frequency</span><span class="val">${fn[freq]}</span></div>
+    <div class="review-row"><span class="lbl">Service price</span><span class="val">$${t.svc.toFixed(2)}</span></div>
+    ${extraLines}
+    ${t.disc > 0 ? `<div class="review-row"><span class="lbl">Recurring discount</span><span class="val" style="color:var(--success)">−$${t.disc.toFixed(2)}</span></div>` : ''}
+    <div class="review-row total"><span class="lbl"><strong>Total</strong></span><span class="val"><strong>$${t.total.toFixed(2)}</strong></span></div>`;
+            document.getElementById('confirmAlert').innerHTML = '';
+        }
+
+        // ─── SIDEBAR ─────────────────────────────────────────────────
+        function updateSidebar() {
+            const el = document.getElementById('summaryBody');
+            if (!S.selection) { el.innerHTML = '<div class="empty-sum"><i class="fa-solid fa-clipboard-list"></i><p>Select a service to see your summary.</p></div>'; return; }
+            const t = calcTotal();
+            el.innerHTML = `
+    <div class="sum-row"><span class="lbl">Service</span><span class="val">${S.selection.name}</span></div>
+    ${S.date ? `<div class="sum-row"><span class="lbl"><i class="fa-solid fa-calendar" style="color:var(--blue);width:14px;margin-right:4px;"></i>Date</span><span class="val">${S.date}</span></div>` : ''}
+    ${S.time ? `<div class="sum-row"><span class="lbl"><i class="fa-regular fa-clock" style="color:var(--blue);width:14px;margin-right:4px;"></i>Time</span><span class="val">${S.time}</span></div>` : ''}
+    <div class="sum-row"><span class="lbl">Subtotal</span><span class="val">$${t.svc.toFixed(2)}</span></div>
+    ${t.extras > 0 ? `<div class="sum-row"><span class="lbl">Add-ons</span><span class="val">$${t.extras.toFixed(2)}</span></div>` : ''}
+    ${t.disc > 0 ? `<div class="sum-row"><span class="lbl" style="color:var(--success)">Discount</span><span class="val" style="color:var(--success)">−$${t.disc.toFixed(2)}</span></div>` : ''}
+    <div class="sum-row total"><span class="lbl"><strong>Total</strong></span><span class="val"><strong>$${t.total.toFixed(2)}</strong></span></div>`;
+        }
+
+        // ─── SUBMIT ──────────────────────────────────────────────────
+        async function submitBooking() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Processing…';
+            const freqId = { once: 1, weekly: 2, biweekly: 3, monthly: 4 };
+            const freq = document.getElementById('freq')?.value || 'once';
+            const payload = {
+                service_id: S.selection.id, date: S.date, time: S.time, arrival_window: S.arrivalWindow,
+                frequency: freq, frequency_id: freqId[freq] || 1, pricing_parameters: S.pricingParams,
+                customer: { first_name: document.getElementById('fName').value, last_name: document.getElementById('lName').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value },
+                address: document.getElementById('addr').value, city: document.getElementById('city').value, state: document.getElementById('state').value, zip: document.getElementById('zip').value, notes: document.getElementById('notes').value,
+                extras: Object.entries(S.extras).filter(([, q]) => q > 0).map(([id, q]) => ({ id: +id, quantity: q })),
+            };
+            L.info('Submitting', { date: payload.date, time: payload.time, aw: payload.arrival_window });
+            try {
+                const d = await api('/bookings', 'POST', payload);
+                const bid = d.id || d.booking_id || d.data?.id || 'Confirmed';
+                document.getElementById('panel4').innerHTML = `
+      <div class="card"><div class="success-wrap">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h2>Booking Confirmed!</h2>
+        <p>Your cleaning is scheduled for <strong>${S.date}</strong> at <strong>${S.time}</strong>.</p>
+        <div class="booking-id">${bid}</div>
+        <p>Confirmation sent to <strong>${document.getElementById('email').value}</strong>.</p>
+        <div class="success-actions">
+          <a href="index.html" class="btn btn-ghost"><i class="fa-solid fa-house"></i> Back to Home</a>
+          <button onclick="location.reload()" class="btn btn-blue"><i class="fa-solid fa-plus"></i> Book Another</button>
+        </div>
+      </div></div>`;
+            } catch (e) {
+                L.error('Failed', { e: e.message });
+                document.getElementById('confirmAlert').innerHTML = `<div class="alert alert-error"><i class="fa-solid fa-circle-exclamation"></i> ${e.message}</div>`;
+                btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Booking';
+            }
+        }
+
+        function showAlert(id, msg, type) { document.getElementById(id).innerHTML = `<div class="alert alert-${type}"><i class="fa-solid fa-circle-exclamation"></i> ${msg}</div>`; }
+
+        // ─── INIT ─────────────────────────────────────────────────────
+        renderCal();
+        loadServices();
+    </script>
+</body>
+
+</html>

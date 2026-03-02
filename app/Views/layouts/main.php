@@ -2,7 +2,7 @@
 // Pull SEO from DB for this page; fall back to controller-provided values
 $_seoPage = $seoPage ?? 'home';
 $_seo     = Database::getSeo($_seoPage);
-$_title   = $_seo['title']       ?: ($pageTitle ?? 'Clean27 — Professional Cleaning Services');
+$_title   = $_seo['title']       ?: ($pageTitle ?? 'BronxHomeServices — Professional Cleaning Services');
 $_desc    = $_seo['description'] ?: ($pageDesc  ?? 'Background-checked, insured cleaners delivering consistent results. Book online in 60 seconds.');
 $_kw      = $_seo['keywords']    ?: '';
 $_og      = $_seo['og_image']    ?: '';

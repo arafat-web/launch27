@@ -1,5 +1,5 @@
 /* ============================================================
-   Clean27 — Admin Panel CSS
+   BronxHomeServices — Admin Panel CSS
    admin.css — loaded ONLY on admin pages
    ============================================================ */
 
@@ -676,33 +676,201 @@ body {
     color: var(--blue);
 }
 
-/* ── RESPONSIVE ─────────────────────────────────────────────── */
-@media(max-width:768px) {
-    .admin-nav {
-        width: 60px;
+/* ── Hamburger button (hidden on desktop) ─── */
+.mob-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* ── Overlay behind drawer on mobile ─── */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    z-index: 99;
+}
+
+.nav-overlay.open {
+    display: block;
+}
+
+/* ── Tablet: keep sidebar but narrower ─── */
+@media (max-width: 1024px) {
+    :root {
+        --nav-w: 210px;
+    }
+}
+
+/* ── Mobile: slide-in drawer ────────────── */
+@media (max-width: 768px) {
+
+    /* Hamburger visible */
+    .mob-menu-btn {
+        display: flex;
     }
 
-    .nav-brand-text,
-    .nav-section-label,
-    .nav-link span,
-    .nav-username,
-    .nav-logout span {
+    /* Sidebar becomes a slide-in drawer */
+    .admin-nav {
+        width: 260px;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        z-index: 200;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, .4);
+    }
+
+    .admin-nav.open {
+        transform: translateX(0);
+    }
+
+    /* Main content fills full width */
+    .admin-main {
+        margin-left: 0;
+    }
+
+    /* Topbar: show hamburger left, title center, actions right */
+    .admin-topbar {
+        padding: 12px 16px;
+        gap: 12px;
+    }
+
+    .topbar-title {
+        flex: 1;
+        font-size: .9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .preview-btn span {
         display: none;
     }
 
-    .admin-main {
-        margin-left: 60px;
+    /* icon only on mobile */
+
+    /* Body padding */
+    .admin-body {
+        padding: 18px 14px 60px;
+    }
+
+    /* Forms */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Stat cards — 2 columns on phone */
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-val {
+        font-size: 1.3rem;
+    }
+
+    /* Dashboard two-col → one col */
+    .db-two-col {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Top pages / browsers grid → one col */
+    .db-two-col~div[style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Booking detail grid → one col */
+    .bk-detail-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .bk-detail-grid .bk-detail-card[style*="grid-column:1/-1"] {
+        grid-column: 1 !important;
+    }
+
+    /* Tab strip: allow scroll, don't wrap */
+    .bk-tab-strip {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Visitors filters wrap */
+    .visitors-filters {
+        gap: 6px;
+    }
+
+    .vf-custom {
+        margin-left: 0;
+        flex-wrap: wrap;
+    }
+
+    /* Tables: make horizontally scrollable */
+    .visitors-table {
+        font-size: .76rem;
+    }
+
+    .visitors-table th,
+    .visitors-table td {
+        padding: 8px 10px;
+    }
+
+    /* Quick grid → 2 cols */
+    .quick-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Page header stacks */
+    .page-hdr[style*="flex"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .page-hdr h1 {
+        font-size: 1.1rem;
+    }
+
+    /* Card head may wrap */
+    .card-head {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Booking KV rows on small screens */
+    .bk-kv-row {
+        flex-wrap: wrap;
+    }
+
+    .bk-kv-row span {
+        min-width: 80px;
+    }
+}
+
+/* ── Very small phones ─────────────────── */
+@media (max-width: 420px) {
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr;
     }
 
     .admin-body {
-        padding: 20px 16px;
-    }
-
-    .admin-topbar {
-        padding: 12px 16px;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
+        padding: 14px 10px 50px;
     }
 }

@@ -286,20 +286,15 @@ async function submitBooking() {
     L.info('Submitting', { date: payload.date, time: payload.time, aw: payload.arrival_window });
     try {
         const d = await api('/bookings', 'POST', payload);
-        const bid = d.id || d.booking_id || d.data?.id || 'Confirmed';
-        const homeUrl = BASE_URL + '/';
-        document.getElementById('panel4').innerHTML = `
-        <div class="card"><div class="success-wrap">
-            <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <h2>Booking Confirmed!</h2>
-            <p>Your cleaning is scheduled for <strong>${S.date}</strong> at <strong>${S.time}</strong>.</p>
-            <div class="booking-id">${bid}</div>
-            <p>Confirmation sent to <strong>${document.getElementById('email').value}</strong>.</p>
-            <div class="success-actions">
-                <a href="${homeUrl}" class="btn btn-ghost"><i class="fa-solid fa-house"></i> Back to Home</a>
-                <button onclick="location.reload()" class="btn btn-blue"><i class="fa-solid fa-plus"></i> Book Another</button>
-            </div>
-        </div></div>`;
+        const bid = d.id || d.booking_id || d.data?.id || '';
+        // Build confirmation URL with summary params
+        const confirmUrl = new URL(BASE_URL + '/booking/confirmation', window.location.origin);
+        confirmUrl.searchParams.set('booking_id', bid);
+        confirmUrl.searchParams.set('first_name', document.getElementById('fName').value);
+        confirmUrl.searchParams.set('service', S.selection?.name || '');
+        confirmUrl.searchParams.set('date', S.date + (S.time ? ' at ' + S.time : ''));
+        confirmUrl.searchParams.set('total', (d.data?.total || d.total || '').toString());
+        window.location.href = confirmUrl.toString();
     } catch (e) {
         L.error('Failed', { e: e.message });
         document.getElementById('confirmAlert').innerHTML = `<div class="alert alert-error"><i class="fa-solid fa-circle-exclamation"></i> ${e.message}</div>`;

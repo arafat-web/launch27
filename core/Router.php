@@ -4,15 +4,18 @@
  * ──────
  * Matches the incoming HTTP method + URI path against the route table
  * and dispatches to the appropriate controller method.
+ * Supports {param} wildcards in route definitions.
  */
 class Router
 {
-    public function __construct(private array $routes) {}
+    public function __construct(private array $routes)
+    {
+    }
 
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         // Strip sub-folder prefix if the app lives in a sub-directory (e.g. /launch27)
         $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
@@ -25,11 +28,36 @@ class Router
 
         $key = $method . ' ' . $uri;
 
+        // 1. Exact match
         if (isset($this->routes[$key])) {
             [$controllerName, $action] = $this->routes[$key];
             $controller = new $controllerName();
             $controller->$action();
             return;
+        }
+
+        // 2. Wildcard / parameterised match  e.g. "GET /admin/bookings/{id}"
+        foreach ($this->routes as $pattern => $handler) {
+            if (!str_contains($pattern, '{'))
+                continue;
+
+            [$routeMethod, $routePath] = explode(' ', $pattern, 2);
+            if ($routeMethod !== $method)
+                continue;
+
+            // Build regex from route pattern
+            $regex = '#^' . preg_replace('/\{([^}]+)\}/', '(?P<$1>[^/]+)', $routePath) . '$#';
+            if (preg_match($regex, $uri, $matches)) {
+                // Inject named captures into $_GET
+                foreach ($matches as $k => $v) {
+                    if (is_string($k))
+                        $_GET[$k] = $v;
+                }
+                [$controllerName, $action] = $handler;
+                $controller = new $controllerName();
+                $controller->$action();
+                return;
+            }
         }
 
         // 404

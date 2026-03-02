@@ -29,7 +29,7 @@ class ApiController
     {
         $response = $this->api->call('booking/services');
         echo json_encode([
-            'success'  => true,
+            'success' => true,
             'response' => json_decode($response, true),
         ]);
     }
@@ -39,7 +39,7 @@ class ApiController
     {
         $response = $this->api->call('booking/arrival_windows');
         echo json_encode([
-            'success'  => true,
+            'success' => true,
             'response' => json_decode($response, true),
         ]);
     }
@@ -49,74 +49,102 @@ class ApiController
     {
         Logger::log('BOOKING_ATTEMPT', [
             'first_name' => $_POST['first_name'] ?? '',
-            'last_name'  => $_POST['last_name']  ?? '',
-            'email'      => $_POST['email']      ?? '',
-            'date'       => $_POST['date']       ?? '',
-            'time'       => $_POST['time']       ?? '',
+            'last_name' => $_POST['last_name'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'date' => $_POST['date'] ?? '',
+            'time' => $_POST['time'] ?? '',
             'service_id' => $_POST['service_id'] ?? '',
         ]);
 
         // Convert 12-hour time → 24-hour
         $timeStr = trim($_POST['time'] ?? '');
         if (preg_match('/(\d{1,2}):(\d{2})\s*(AM|PM)/i', $timeStr, $m)) {
-            $hour   = (int)$m[1];
+            $hour = (int) $m[1];
             $minute = $m[2];
             $period = strtoupper($m[3]);
-            if ($period === 'PM' && $hour !== 12) { $hour += 12; }
-            elseif ($period === 'AM' && $hour === 12) { $hour = 0; }
+            if ($period === 'PM' && $hour !== 12) {
+                $hour += 12;
+            } elseif ($period === 'AM' && $hour === 12) {
+                $hour = 0;
+            }
             $time24 = sprintf('%02d:%02d', $hour, $minute);
         } else {
             $time24 = $timeStr;
         }
 
-        $datetime       = ($_POST['date'] ?? '') . 'T' . $time24 . ':00';
-        $pricingParams  = json_decode($_POST['pricing_parameters'] ?? '[]', true);
-        $serviceId      = (int)($_POST['service_id'] ?? 0);
+        $datetime = ($_POST['date'] ?? '') . 'T' . $time24 . ':00';
+        $pricingParams = json_decode($_POST['pricing_parameters'] ?? '[]', true);
+        $serviceId = (int) ($_POST['service_id'] ?? 0);
 
         $services = [['id' => $serviceId]];
         if (!empty($pricingParams)) {
             $services[0]['pricing_parameters'] = array_map(fn($p) => [
-                'id'       => $p['id']  ?? 1,
+                'id' => $p['id'] ?? 1,
                 'quantity' => $p['quantity'] ?? ($p['value'] ?? 1),
             ], $pricingParams);
-        } else {
-            $services[0]['pricing_parameters'] = [['id' => 1, 'quantity' => 1]];
         }
 
         $payload = [
-            'user'           => [
+            'user' => [
                 'first_name' => $_POST['first_name'] ?? '',
-                'last_name'  => $_POST['last_name']  ?? '',
-                'email'      => $_POST['email']      ?? '',
-                'phone'      => $_POST['phone']      ?? '',
+                'last_name' => $_POST['last_name'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'phone' => $_POST['phone'] ?? '',
             ],
-            'address'        => $_POST['address']  ?? '',
-            'city'           => $_POST['city']     ?? '',
-            'state'          => substr($_POST['state'] ?? 'NY', 0, 3),
-            'zip'            => $_POST['zip']      ?? '',
-            'services'       => $services,
-            'service_date'   => $datetime,
-            'arrival_window' => (int)($_POST['arrival_window'] ?? 0),
-            'frequency_id'   => 1,
+            'address' => $_POST['address'] ?? '',
+            'city' => $_POST['city'] ?? '',
+            'state' => substr($_POST['state'] ?? 'NY', 0, 3),
+            'zip' => $_POST['zip'] ?? '',
+            'services' => $services,
+            'service_date' => $datetime,
+            'arrival_window' => (int) ($_POST['arrival_window'] ?? 0),
+            'frequency_id' => 1,
             'payment_method' => 'cash',
         ];
 
-        $raw     = $this->api->call('booking', 'POST', $payload);
+        $raw = $this->api->call('booking', 'POST', $payload);
         $decoded = json_decode($raw, true);
 
         Logger::log('API_RESPONSE_DETAILED', [
-            'email'    => $_POST['email'] ?? '',
-            'raw'      => substr($raw, 0, 500),
-            'decoded'  => $decoded,
+            'email' => $_POST['email'] ?? '',
+            'raw' => substr($raw, 0, 500),
+            'decoded' => $decoded,
         ]);
 
         if (is_array($decoded) && isset($decoded['(root)'])) {
             http_response_code(422);
             Logger::log('BOOKING_ERROR', ['error' => 'validation', 'details' => $decoded['(root)']], 'ERROR');
             echo json_encode(['success' => false, 'error' => 'Validation error', 'details' => $decoded]);
-        } elseif (isset($decoded['booking_id'])) {
-            Logger::log('BOOKING_SUCCESS', ['booking_id' => $decoded['booking_id'], 'amount' => $decoded['total'] ?? '?'], 'SUCCESS');
-            echo json_encode(['success' => true, 'booking_id' => $decoded['booking_id'], 'id' => $decoded['booking_id'], 'data' => $decoded]);
+        } elseif (isset($decoded['booking_id']) || isset($decoded['id'])) {
+            $assignedId = $decoded['booking_id'] ?? $decoded['id'];
+            // ── Save locally ────────────────────────────────────────────────
+            try {
+                Database::saveBooking([
+                    'l27_id' => (string) $assignedId,
+                    'first_name' => $_POST['first_name'] ?? '',
+                    'last_name' => $_POST['last_name'] ?? '',
+                    'email' => $_POST['email'] ?? '',
+                    'phone' => $_POST['phone'] ?? '',
+                    'address' => $_POST['address'] ?? '',
+                    'city' => $_POST['city'] ?? '',
+                    'state' => $_POST['state'] ?? '',
+                    'zip' => $_POST['zip'] ?? '',
+                    'service_id' => $serviceId,
+                    'service_name' => $decoded['services'][0]['name'] ?? ($services[0]['name'] ?? ''),
+                    'service_date' => $datetime,
+                    'arrival_window' => (int) ($_POST['arrival_window'] ?? 0),
+                    'frequency' => $_POST['freq'] ?? 'once',
+                    'pricing_params' => $_POST['pricing_parameters'] ?? '',
+                    'notes' => $_POST['notes'] ?? '',
+                    'total' => (float) ($decoded['total'] ?? $decoded['ga_item']['price'] ?? 0),
+                    'raw_response' => substr($raw, 0, 2000),
+                ]);
+            } catch (\Throwable $e) {
+                Logger::log('LOCAL_BOOKING_SAVE_ERROR', ['error' => $e->getMessage()], 'ERROR');
+            }
+            // ────────────────────────────────────────────────────────────────
+            Logger::log('BOOKING_SUCCESS', ['booking_id' => $assignedId, 'amount' => $decoded['total'] ?? $decoded['ga_item']['price'] ?? '?'], 'SUCCESS');
+            echo json_encode(['success' => true, 'booking_id' => $assignedId, 'id' => $assignedId, 'data' => $decoded]);
         } else {
             Logger::log('BOOKING_RESPONSE', ['decoded' => $decoded]);
             echo json_encode(['success' => true, 'data' => $decoded]);
@@ -128,31 +156,31 @@ class ApiController
     {
         // Path map (short → actual Launch27 path)
         $pathMap = [
-            '/services'        => '/booking/services',
-            '/windows'         => '/booking/arrival_windows',
+            '/services' => '/booking/services',
+            '/windows' => '/booking/arrival_windows',
             '/arrival_windows' => '/booking/arrival_windows',
-            '/spots'           => '/booking/spots',
-            '/booking/spots'   => '/booking/spots',
+            '/spots' => '/booking/spots',
+            '/booking/spots' => '/booking/spots',
         ];
 
-        $path       = '/' . ltrim($_GET['path'] ?? 'services', '/');
+        $path = '/' . ltrim($_GET['path'] ?? 'services', '/');
         $actualPath = $pathMap[$path] ?? $path;
-        $method     = $_SERVER['REQUEST_METHOD'];
+        $method = $_SERVER['REQUEST_METHOD'];
 
         // /booking/spots requires a POST with a JSON body
         if ($actualPath === '/booking/spots') {
             $body = json_encode([
-                'date'        => $_GET['date']        ?? date('Y-m-d'),
-                'location_id' => (int)($_GET['location_id'] ?? 1),
-                'mode'        => 'new',
-                'days'        => (int)($_GET['days']  ?? 35),
-                'duration'    => (int)($_GET['duration'] ?? 0),
+                'date' => $_GET['date'] ?? date('Y-m-d'),
+                'location_id' => (int) ($_GET['location_id'] ?? 1),
+                'mode' => 'new',
+                'days' => (int) ($_GET['days'] ?? 35),
+                'duration' => (int) ($_GET['duration'] ?? 0),
             ]);
             $result = $this->api->proxy($actualPath, 'POST', [], $body);
         } else {
             $params = $_GET;
             unset($params['path']);
-            $body   = ($method !== 'GET') ? file_get_contents('php://input') : null;
+            $body = ($method !== 'GET') ? file_get_contents('php://input') : null;
             $result = $this->api->proxy($actualPath, $method, $params, $body);
         }
 
@@ -163,8 +191,8 @@ class ApiController
     // ── GET /api/logs ──────────────────────────────────────────────────────────
     public function logs(): void
     {
-        $limit = (int)($_GET['limit'] ?? 100);
-        $logs  = Logger::getLogs($limit);
+        $limit = (int) ($_GET['limit'] ?? 100);
+        $logs = Logger::getLogs($limit);
         echo json_encode(['success' => true, 'count' => count($logs), 'logs' => $logs]);
     }
 }

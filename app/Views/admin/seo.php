@@ -40,7 +40,7 @@
                     </label>
                     <input type="text" name="<?= $page ?>_title" id="title-<?= $page ?>"
                            value="<?= htmlspecialchars($row['title']) ?>"
-                           maxlength="80" placeholder="e.g. Professional Cleaning Services — Clean27"
+                           maxlength="80" placeholder="e.g. Professional Cleaning Services — BronxHomeServices"
                            oninput="updateCounter('title-<?= $page ?>','cnt-title-<?= $page ?>',60)">
                     <div class="counter" id="cnt-title-<?= $page ?>"><?= mb_strlen($row['title']) ?> / 60</div>
                 </div>

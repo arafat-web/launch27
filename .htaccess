@@ -1,6 +1,7 @@
 Options -Indexes
 
 RewriteEngine On
+RewriteBase /
 
 # ── Serve real files & directories as-is ──────────────────────────────────────
 RewriteCond %{REQUEST_FILENAME} !-f

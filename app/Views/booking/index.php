@@ -1,6 +1,6 @@
 <!-- NAV -->
 <nav>
-    <a href="<?= View::url('/') ?>" class="logo">Bronx<span>HomeServices</span></a>
+    <a href="<?= View::url('/') ?>" class="logo"><span class="logo-desktop">Bronx<span>HomeServices</span></span><span class="logo-mobile">B<span>HS</span></span></a>
     <div class="nav-right">
         <div class="secure-pill"><i class="fa-solid fa-lock"></i> Secure Booking</div>
         <a href="<?= View::url('/') ?>" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>

@@ -80,8 +80,12 @@ nav#navbar.scrolled .logo {
     color: var(--navy);
 }
 
-.logo span {
+.logo span span {
     color: var(--blue);
+}
+
+.logo-mobile {
+    display: none;
 }
 
 .nav-links {
@@ -124,6 +128,18 @@ nav#navbar.scrolled .nav-links a:hover {
 .btn-nav:hover {
     background: var(--blue-dark) !important;
     transform: translateY(-1px);
+}
+
+.mobile-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: var(--white);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+nav#navbar.scrolled .mobile-toggle {
+    color: var(--navy);
 }
 
 /* ─── BOOKING NAV ─────────────────────────────────────────── */
@@ -1037,6 +1053,7 @@ body.page-booking {
 @media(max-width:680px) {
     .page {
         grid-template-columns: 1fr;
+        padding-top: 20px;
         padding-bottom: 90px;
     }
 
@@ -2095,13 +2112,80 @@ body.page-booking {
 }
 
 /* ─── RESPONSIVE ───────────────────────────────────────────── */
-@media(max-width:600px) {
+@media(max-width:900px) {
     nav#navbar {
-        padding: 0 4%;
+        padding: 0 5%;
+    }
+
+    .logo-desktop {
+        display: none;
+    }
+
+    .logo-mobile {
+        display: inline;
+    }
+
+    .mobile-toggle {
+        display: block;
     }
 
     .nav-links {
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding: 24px 5%;
+        gap: 20px;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, .08);
+        border-top: 1px solid var(--border);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all .3s ease;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links a {
+        color: var(--navy);
+        font-size: 1.05rem;
+        padding: 8px 0;
+        display: block;
+        width: 100%;
+    }
+
+    .nav-links .btn-nav {
+        text-align: center;
+        width: 100%;
+        margin-top: 10px;
+        padding: 14px;
+        font-size: 1rem;
+    }
+}
+
+@media(max-width:600px) {
+
+    nav#navbar,
+    nav:not(#navbar) {
+        padding: 0 4%;
+    }
+
+    .secure-pill {
         display: none;
+    }
+
+    .nav-back {
+        font-size: 0;
+    }
+
+    .nav-back i {
+        font-size: 1.2rem;
     }
 
     .hero-content {
@@ -2111,5 +2195,40 @@ body.page-booking {
 
     section {
         padding: 72px 4%;
+    }
+
+    .progress-card {
+        padding: 16px;
+    }
+
+    .progress-top h1 {
+        font-size: 1.15rem;
+    }
+
+    .step-lbl {
+        display: none;
+    }
+
+    .card-head,
+    .card-body {
+        padding: 16px;
+    }
+
+    .nav-row {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .nav-row .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-row div:empty {
+        display: none;
+    }
+
+    .cal-wrapper {
+        padding: 16px;
     }
 }

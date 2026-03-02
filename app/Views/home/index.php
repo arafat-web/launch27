@@ -1,7 +1,11 @@
-<!-- ── NAVIGATION ── -->
 <nav id="navbar">
-    <a href="<?= View::url('/') ?>" class="logo">Bronx<span>HomeServices</span></a>
-    <ul class="nav-links">
+    <a href="<?= View::url('/') ?>" class="logo"><span class="logo-desktop">Bronx<span>HomeServices</span></span><span class="logo-mobile">B<span>HS</span></span></a>
+    
+    <div class="mobile-toggle" id="mobileToggle">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
         <li><a href="<?= View::url('/') ?>#services">Services</a></li>
         <li><a href="<?= View::url('/') ?>#how">Process</a></li>
         <li><a href="<?= View::url('/') ?>#why">Why Us</a></li>
